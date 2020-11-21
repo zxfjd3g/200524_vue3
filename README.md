@@ -260,7 +260,6 @@ interface State {
   person: {
     name?: string
   }
-  update: () => void
 }
 
 export default {
@@ -273,7 +272,14 @@ export default {
       person: {
         // name: 'tom'
       },
-      update: () => {
+      
+    })
+
+    const stateRefs = toRefs(state)
+
+    const count = ref(0)
+    
+    const update = () => {
         state.msg += '--'
         // 给对象添加新属性 ==> 3.0自动更新,2.0不可以
         state.person.name += '++' 
@@ -282,11 +288,6 @@ export default {
 
         count.value++
       }
-    })
-
-    const stateRefs = toRefs(state)
-
-    const count = ref(0)
 
     // 监视一个ref
     watch(count, (newVal, oldVal) => {
@@ -305,7 +306,8 @@ export default {
       // state  // 模板表达式需要多写一层
       // ...state // 对象属性不是响应式的
       ...stateRefs,
-      count
+      count,
+      update,
     }
   }
 }
